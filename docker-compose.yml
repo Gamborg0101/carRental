@@ -1,0 +1,7 @@
+services:
+  database:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_PASSWORD: secret
+    ports:
+      - 5432:5432

@@ -16,6 +16,35 @@ datasource db {
 
 model User {
   id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  firstname  String?
+  lastname  String?
+  phonenumber String @unique()
+  email String @unique
+  rentals Rental[] // 1 user to many cars
 }
+
+model Car{
+  id Int @id @default(autoincrement())
+  model String
+  maker String
+  year String
+  isRented Boolean
+  rentals Rental[]
+}
+
+model Rental{
+  id Int @id @default(autoincrement())
+  user User @relation (fields: [userId], references: [id]) //Relation field
+  userId Int //Foreign key
+  car Car @relation (fields: [carId], references: [id])
+  carId Int
+  rentedAt DateTime @default(now())
+  returnedAt DateTime?
+}
+
+
+/*
+User - the user itself 
+Car - the car itself 
+Rental - the history of the rented cars
+*/

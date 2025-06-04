@@ -1,11 +1,13 @@
-
 Prisma migrate:
 prisma migrate dev --name init
 
 Run docker:
 docker compose up
-
 docker ps - see what connections are established
+
+Kør api mellem docker og bun:
+bun run index.ts
+Husk at genstarte, hvis ny api kode er skrevet.
 
 Start med at lave backenden - lav de mest basale kald:
 Post - lav en bookiing

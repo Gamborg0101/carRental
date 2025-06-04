@@ -6,7 +6,8 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  //output   = "../src/generated/prisma"
+  seed = "seed.ts"
 }
 
 datasource db {
@@ -25,17 +26,17 @@ model User {
 
 model Car{
   id Int @id @default(autoincrement())
-  model String
   maker String
+  model String
   year String
   isRented Boolean
   rentals Rental[]
 }
 
 model Rental{
-  id Int @id @default(autoincrement())
-  user User @relation (fields: [userId], references: [id]) //Relation field
-  userId Int //Foreign key
+  id Int @id @default(autoincrement()) // Primary key
+  user User @relation (fields: [userId], references: [id]) //Define relation field - not an exactly field
+  userId Int //Foreign key comes from relation field
   car Car @relation (fields: [carId], references: [id])
   carId Int
   rentedAt DateTime @default(now())

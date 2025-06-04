@@ -1,6 +1,5 @@
 # carrental
 
-
 I Prisma:
 1. Lav et skema som matcher dine behov
     1.1 hvilke tabeller skal du bruge

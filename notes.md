@@ -1,3 +1,7 @@
+
+Prisma migrate:
+prisma migrate dev --name init
+
 Run docker:
 docker compose up
 

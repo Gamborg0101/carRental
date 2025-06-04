@@ -3,14 +3,23 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "prisma": "^6.8.2"
+    "prisma": "^6.9.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "@prisma/client": "^6.8.2"
+    "@prisma/client": "^6.9.0"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

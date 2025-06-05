@@ -9,10 +9,16 @@ Kør api mellem docker og bun:
 bun run index.ts
 Husk at genstarte, hvis ny api kode er skrevet.
 
-Start med at lave backenden - lav de mest basale kald:
-Post - lav en bookiing
-Get - Få alle bookinger
-Get - Få enkelt booking
+start projekt:
+backend: run bun index.ts
+backend: docker compose up
+frontend: npm run dev
+
+curl get:
+http://localhost:6543/api/function
+
+curl create: (x stands for request method)
+curl -X POST http://localhost:6543/api/function
 
 Se denne video:
 https://www.youtube.com/watch?v=uGP4CS5V1hE&ab_channel=CodeBrew

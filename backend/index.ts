@@ -4,13 +4,25 @@ import { PrismaClient } from "@prisma/client";
 const PORT = 6543;
 const prisma = new PrismaClient();
 
-interface User {
-  id: number;
+interface UserInput {
   firstname: string;
   lastname: string;
   phonenumber: string;
   email: string;
-  rentals: [];
+}
+
+interface CarInput {
+  model: string;
+  maker: string;
+  year: string;
+  isRented: boolean;
+}
+
+interface Rental {
+  userId: number;
+  carId: number;
+  rentedAt: Date;
+  returnedAt: Date;
 }
 
 async function handleGetAllUsers() {
@@ -19,6 +31,36 @@ async function handleGetAllUsers() {
     headers: { "Content-Type": "application/json" },
   });
 }
+
+async function handleGetAllCars() {
+  const cars = await prisma.car.findMany();
+  return new Response(JSON.stringify(cars), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+async function handleGetAllRentals() {
+  const rentals = await prisma.rental.findMany();
+  return new Response(JSON.stringify(rentals), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+async function createNewUser(data: UserInput) {
+  await prisma.user.create({
+    data,
+  });
+  console.log("User succesfully created");
+}
+
+async function createNewCar(data: CarInput) {
+  await prisma.car.create({
+    data,
+  });
+  console.log("Car succesfully created");
+}
+
+/* ENDPOINTS - new file? - maybe files for each type of request */
 
 serve({
   port: PORT,
@@ -33,28 +75,41 @@ serve({
       return handleGetAllUsers();
     }
 
-    // /* GET - route to get all cars  */
-    // if (method == "GET" && pathname == "/api/getcars") {
-    // }
+    /* GET - route to get all cars  */
+    if (method == "GET" && pathname == "/api/getcars") {
+      return handleGetAllCars();
+    }
 
-    // /* GET - route to get all rentals  */
-    // if (method == "GET" && pathname == "/api/getrentals") {
-    // }
+    /* GET - route to get all rentals  */
+    if (method == "GET" && pathname == "/api/getrentals") {
+      return handleGetAllRentals();
+    }
 
-    // /* POST - route to create a user */
-    // if (method == "POST" && pathname == "api/createuser") {
-    //   /**/
-    // }
+    /* POST - route to create a user */
+    if (method == "POST" && pathname == "/api/createuser") {
+      try {
+        const json = (await request.json()) as UserInput; // Assert the value - no guarantees
+        await createNewUser(json);
+        return new Response("User created", { status: 201 });
+      } catch {
+        return new Response("Server error", { status: 404 });
+      }
+    }
 
-    // /* POST - route to create a user */
-    // if (method == "POST" && pathname == "api/createcar") {
-    //   /**/
-    // }
+    /* POST - route to create a user */
+    if (method == "POST" && pathname == "api/createcar") {
+      try {
+        const json = (await request.json()) as CarInput;
+        await createNewCar(json);
+        return new Response("Car created", { status: 201 });
+      } catch {
+        return new Response("Server error", { status: 404 });
+      }
+    }
 
-    // /* POST - route to create a user */
-    // if (method == "POST" && pathname == "api/createrental") {
-    //   /**/
-    // }
+    /* POST - route to create a rental */
+    if (method == "POST" && pathname == "api/createrental") {
+    }
 
     // /* DELETE - Delete a rental */
     // if (method == "DELETE" && pathname == "/api/posts") {

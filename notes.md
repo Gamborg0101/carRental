@@ -1,3 +1,9 @@
+/////////////////////////////////////////////
+
+To do:
+Få lavet ID lookups
+Unit tests - særligt for at se, om requests går igennem.
+/////////////////////////////////////////////
 Prisma migrate:
 prisma migrate dev --name init
 
@@ -19,15 +25,6 @@ http://localhost:6543/api/function
 
 curl create: (x stands for request method)
 curl -X POST http://localhost:6543/api/function
-
-Se denne video:
-https://www.youtube.com/watch?v=uGP4CS5V1hE&ab_channel=CodeBrew
-
-Samt denne:
-https://www.youtube.com/watch?v=RebA5J-rlwg&t=865s&ab_channel=WebDevSimplified
-
-Create a new User record.
-https://www.prisma.io/docs/getting-started/quickstart-sqlite
 
 Using postgres as a relational database(Relational - tables are related to each other using keys)
 Prisma ORM - interacts with DB

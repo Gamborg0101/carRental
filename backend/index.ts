@@ -30,6 +30,13 @@ async function handleGetAllUsers() {
   });
 }
 
+async function handleGetSingleUser(id: number) {
+  const user = await prisma.user.findUnique({ where: { id } });
+  return new Response(JSON.stringify(user), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
 async function handleGetAllCars() {
   const cars = await prisma.car.findMany();
   return new Response(JSON.stringify(cars), {
@@ -106,22 +113,29 @@ serve({
     const { method } = request;
     const { pathname } = new URL(request.url);
 
-    /* GET - route to get all users  */
+    /* GET - all users  */
     if (method == "GET" && pathname == "/api/getusers") {
       return handleGetAllUsers();
     }
 
-    /* GET - route to get all cars  */
+    /*GET - Get single user */
+    let match = pathname.match(/^\/api\/user\/(\d+)$/);
+    if (method === "GET" && match) {
+      const id = Number(match[1]);
+      return handleGetSingleUser(id);
+    }
+
+    /* GET - all cars  */
     if (method == "GET" && pathname == "/api/getcars") {
       return handleGetAllCars();
     }
 
-    /* GET - route to get all rentals  */
+    /* GET - all rentals  */
     if (method == "GET" && pathname == "/api/getrentals") {
       return handleGetAllRentals();
     }
 
-    /* POST - route to create a user */
+    /* POST - create a user */
     if (method == "POST" && pathname == "/api/createuser") {
       try {
         const json = (await request.json()) as UserInput; // Assert the value - no guarantees
@@ -132,7 +146,7 @@ serve({
       }
     }
 
-    /* POST - route to create a user */
+    /* POST - create a car */
     if (method == "POST" && pathname == "/api/createcar") {
       try {
         const json = (await request.json()) as CarInput;
@@ -143,7 +157,7 @@ serve({
       }
     }
 
-    /* POST - route to create a rental */
+    /* POST - create a rental */
     if (method == "POST" && pathname == "/api/createrental") {
       try {
         const json = (await request.json()) as Rental;
@@ -179,7 +193,6 @@ serve({
       }
       return new Response("Not Found", { status: 404 });
     }
-
     return new Response("Not Found", { status: 404 });
   },
 });

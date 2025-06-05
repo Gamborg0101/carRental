@@ -1,4 +1,4 @@
-import { serve } from "bun";
+import { deepEquals, serve } from "bun";
 import { PrismaClient } from "@prisma/client";
 
 const PORT = 6543;
@@ -21,8 +21,6 @@ interface CarInput {
 interface Rental {
   userId: number;
   carId: number;
-  rentedAt: Date;
-  returnedAt: Date;
 }
 
 async function handleGetAllUsers() {
@@ -60,6 +58,46 @@ async function createNewCar(data: CarInput) {
   console.log("Car succesfully created");
 }
 
+async function createNewRental(data: Rental) {
+  const timeStamp = new Date();
+
+  await prisma.car.update({
+    where: { id: data.carId },
+    data: { isRented: true },
+  });
+
+  await prisma.rental.create({
+    data: {
+      userId: data.userId,
+      carId: data.carId,
+      rentedAt: timeStamp,
+      returnedAt: null,
+    },
+  });
+
+  console.log("Rental created");
+}
+
+async function deleteUser(id: number) {
+  await prisma.user.delete({
+    where: { id },
+  });
+  console.log(`User ${id} is deleted`);
+}
+async function deleteCar(id: number) {
+  await prisma.car.delete({
+    where: { id },
+  });
+  console.log(`Car ${id} is deleted`);
+}
+
+async function deleteRental(id: number) {
+  await prisma.rental.delete({
+    where: { id },
+  });
+  console.log(`Rental ${id} is deleted`);
+}
+
 /* ENDPOINTS - new file? - maybe files for each type of request */
 
 serve({
@@ -67,8 +105,6 @@ serve({
   async fetch(request) {
     const { method } = request;
     const { pathname } = new URL(request.url);
-    const pathRefexForID = /^\api\/posts\/(\d+)$/;
-    console.log(method, pathname);
 
     /* GET - route to get all users  */
     if (method == "GET" && pathname == "/api/getusers") {
@@ -97,7 +133,7 @@ serve({
     }
 
     /* POST - route to create a user */
-    if (method == "POST" && pathname == "api/createcar") {
+    if (method == "POST" && pathname == "/api/createcar") {
       try {
         const json = (await request.json()) as CarInput;
         await createNewCar(json);
@@ -108,23 +144,41 @@ serve({
     }
 
     /* POST - route to create a rental */
-    if (method == "POST" && pathname == "api/createrental") {
+    if (method == "POST" && pathname == "/api/createrental") {
+      try {
+        const json = (await request.json()) as Rental;
+        await createNewRental(json);
+        return new Response("Car is rented", { status: 201 });
+      } catch {
+        return new Response("Server error", { status: 404 });
+      }
     }
 
-    // /* DELETE - Delete a rental */
-    // if (method == "DELETE" && pathname == "/api/posts") {
-    //   /**/
-    // }
+    /* DELETE */
+    if (method == "DELETE") {
+      let match;
 
-    // /* DELETE - Delete a user */
-    // if (method == "DELETE" && pathname == "/api/posts") {
-    //   /**/
-    // }
+      match = pathname.match(/^\/api\/deleteuser\/(\d+)$/);
+      if (match) {
+        const id = Number(match[1]);
+        await deleteUser(id);
+        return new Response("User deleted", { status: 200 });
+      }
+      match = pathname.match(/^\/api\/deletecar\/(\d+)$/);
+      if (match) {
+        const id = Number(match[1]);
+        await deleteCar(id);
+        return new Response("Car deleted", { status: 200 });
+      }
 
-    // /* DELETE - Delete a car */
-    // if (method == "DELETE" && pathname == "/api/posts") {
-    //   /**/
-    // }
+      match = pathname.match(/^\/api\/deleterental\/(\d+)$/);
+      if (match) {
+        const id = Number(match[1]);
+        await deleteRental(id);
+        return new Response("Rental deleted", { status: 200 });
+      }
+      return new Response("Not Found", { status: 404 });
+    }
 
     return new Response("Not Found", { status: 404 });
   },

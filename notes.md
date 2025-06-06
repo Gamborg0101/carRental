@@ -1,9 +1,21 @@
 /////////////////////////////////////////////
 
 To do:
-Få lavet ID lookups
+
+UI:
+Frontpage:
+*New Rental
+
+Create new rental
+*Find bookings
+**Find booking
+**Find user
+**Find car
+**Delete rental
+
 Unit tests - særligt for at se, om requests går igennem.
 /////////////////////////////////////////////
+
 Prisma migrate:
 prisma migrate dev --name init
 

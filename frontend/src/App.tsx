@@ -1,17 +1,18 @@
 import React from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import { FrontBody } from "./components/Front-Body";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomeRender from "./pages/Home";
+import CreateRental from "./pages/CreateRental";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <div className="app-container">
-        <Header />
-        <FrontBody />
-        <Footer />
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomeRender />} />
+          <Route path="/rental" element={<CreateRental />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

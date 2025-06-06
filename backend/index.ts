@@ -1,4 +1,4 @@
-import { deepEquals, serve } from "bun";
+import { serve } from "bun";
 import { PrismaClient } from "@prisma/client";
 
 const PORT = 6543;
@@ -23,45 +23,50 @@ interface Rental {
   carId: number;
 }
 
+const defaultHeaders = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+};
+
 async function handleGetAllUsers() {
   const users = await prisma.user.findMany();
   return new Response(JSON.stringify(users), {
-    headers: { "Content-Type": "application/json" },
+    headers: defaultHeaders,
   });
 }
 
 async function handleGetSingleUser(id: number) {
   const user = await prisma.user.findUnique({ where: { id } });
   return new Response(JSON.stringify(user), {
-    headers: { "Content-Type": "application/json" },
+    headers: defaultHeaders,
   });
 }
 
 async function handleGetSingleCar(id: number) {
   const car = await prisma.car.findUnique({ where: { id } });
   return new Response(JSON.stringify(car), {
-    headers: { "Content-type": "application/json" },
+    headers: defaultHeaders,
   });
 }
 
 async function handleGetSingleRental(id: number) {
   const rental = await prisma.rental.findUnique({ where: { id } });
   return new Response(JSON.stringify(rental), {
-    headers: { "Content-Type": "application/json" },
+    headers: defaultHeaders,
   });
 }
 
 async function handleGetAllCars() {
   const cars = await prisma.car.findMany();
   return new Response(JSON.stringify(cars), {
-    headers: { "Content-Type": "application/json" },
+    headers: defaultHeaders,
   });
 }
 
 async function handleGetAllRentals() {
   const rentals = await prisma.rental.findMany();
   return new Response(JSON.stringify(rentals), {
-    headers: { "Content-Type": "application/json" },
+    headers: defaultHeaders,
   });
 }
 
@@ -128,6 +133,7 @@ serve({
     const { method } = request;
     const { pathname } = new URL(request.url);
 
+    /* ---------------- */
     /* Cleans request strings for id's */
     function idGenerator(url: URL) {
       const id = url.searchParams.get("id");
@@ -136,7 +142,7 @@ serve({
     }
 
     /* GET - single user */
-    if (method == "GET" && pathname.startsWith("/api/getuser")) {
+    if (method == "GET" && pathname.startsWith("/api/getuser/id")) {
       try {
         const id = idGenerator(new URL(request.url));
         return handleGetSingleUser(id);
@@ -148,7 +154,7 @@ serve({
     }
 
     /* Get signle car */
-    if (method == "GET" && pathname.startsWith("/api/getcar")) {
+    if (method == "GET" && pathname.startsWith("/api/getcar/id")) {
       try {
         const id = idGenerator(new URL(request.url));
         return handleGetSingleCar(id);
@@ -160,7 +166,7 @@ serve({
     }
 
     /* Get single rental*/
-    if (method == "GET" && pathname.startsWith("/api/getrental")) {
+    if (method == "GET" && pathname.startsWith("/api/getrental/id")) {
       try {
         const id = idGenerator(new URL(request.url));
         return handleGetSingleRental(id);

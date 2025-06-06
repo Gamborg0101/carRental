@@ -37,6 +37,20 @@ async function handleGetSingleUser(id: number) {
   });
 }
 
+async function handleGetSingleCar(id: number) {
+  const car = await prisma.car.findUnique({ where: { id } });
+  return new Response(JSON.stringify(car), {
+    headers: { "Content-type": "application/json" },
+  });
+}
+
+async function handleGetSingleRental(id: number) {
+  const rental = await prisma.rental.findUnique({ where: { id } });
+  return new Response(JSON.stringify(rental), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
 async function handleGetAllCars() {
   const cars = await prisma.car.findMany();
   return new Response(JSON.stringify(cars), {
@@ -91,6 +105,7 @@ async function deleteUser(id: number) {
   });
   console.log(`User ${id} is deleted`);
 }
+
 async function deleteCar(id: number) {
   await prisma.car.delete({
     where: { id },
@@ -113,16 +128,52 @@ serve({
     const { method } = request;
     const { pathname } = new URL(request.url);
 
+    /* Cleans request strings for id's */
+    function idGenerator(url: URL) {
+      const id = url.searchParams.get("id");
+      if (id === null || id === "") throw new Error("Invalid ID");
+      return parseInt(id);
+    }
+
+    /* GET - single user */
+    if (method == "GET" && pathname.startsWith("/api/getuser")) {
+      try {
+        const id = idGenerator(new URL(request.url));
+        return handleGetSingleUser(id);
+      } catch {
+        return new Response("ID parameter is required and must be valid", {
+          status: 400,
+        });
+      }
+    }
+
+    /* Get signle car */
+    if (method == "GET" && pathname.startsWith("/api/getcar")) {
+      try {
+        const id = idGenerator(new URL(request.url));
+        return handleGetSingleCar(id);
+      } catch {
+        return new Response("ID parameter is required and must be valid", {
+          status: 400,
+        });
+      }
+    }
+
+    /* Get single rental*/
+    if (method == "GET" && pathname.startsWith("/api/getrental")) {
+      try {
+        const id = idGenerator(new URL(request.url));
+        return handleGetSingleRental(id);
+      } catch {
+        return new Response("ID parameter is required and must be valid", {
+          status: 400,
+        });
+      }
+    }
+
     /* GET - all users  */
     if (method == "GET" && pathname == "/api/getusers") {
       return handleGetAllUsers();
-    }
-
-    /*GET - Get single user */
-    let match = pathname.match(/^\/api\/user\/(\d+)$/);
-    if (method === "GET" && match) {
-      const id = Number(match[1]);
-      return handleGetSingleUser(id);
     }
 
     /* GET - all cars  */
@@ -142,7 +193,7 @@ serve({
         await createNewUser(json);
         return new Response("User created", { status: 201 });
       } catch {
-        return new Response("Server error", { status: 404 });
+        return new Response("Server error", { status: 500 });
       }
     }
 
@@ -153,7 +204,7 @@ serve({
         await createNewCar(json);
         return new Response("Car created", { status: 201 });
       } catch {
-        return new Response("Server error", { status: 404 });
+        return new Response("Server error", { status: 500 });
       }
     }
 
@@ -164,9 +215,13 @@ serve({
         await createNewRental(json);
         return new Response("Car is rented", { status: 201 });
       } catch {
-        return new Response("Server error", { status: 404 });
+        return new Response("Server error", { status: 500 });
       }
     }
+
+    /*
+    Make a determinator function for delete?
+    */
 
     /* DELETE */
     if (method == "DELETE") {
@@ -196,3 +251,5 @@ serve({
     return new Response("Not Found", { status: 404 });
   },
 });
+
+console.log(`BUN API is running on http://localhost:${PORT}`);

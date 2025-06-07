@@ -28,45 +28,40 @@ export default function CreateBooking() {
     }
 
     return (
-      <div className="app-container">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-          <input
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="First Name"
-            value={firstname}
-            onChange={(e) => setFirstname(e.target.value)}
-            required
-          />
-          <input
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Last Name"
-            value={lastname}
-            onChange={(e) => setLastname(e.target.value)}
-            required
-          />
-          <input
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Phone Number"
-            value={phonenumber}
-            onChange={(e) => setPhonenumber(e.target.value)}
-            required
-          />
-          <input
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-green-500 text-white py-2 rounded"
-          >
-            Create User
-          </button>
-        </form>
-      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+        <input
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="First Name"
+          value={firstname}
+          onChange={(e) => setFirstname(e.target.value)}
+          required
+        />
+        <input
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Last Name"
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
+          required
+        />
+        <input
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Phone Number"
+          value={phonenumber}
+          onChange={(e) => setPhonenumber(e.target.value)}
+          required
+        />
+        <input
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          required
+        />
+        <button type="submit" className="bg-green-500 text-white py-2 rounded">
+          Create User
+        </button>
+      </form>
     );
   }
 
@@ -222,26 +217,24 @@ export default function CreateBooking() {
             Create Rental
           </button>
         </div>
-
-        {activeForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded p-6 max-w-md w-full relative">
-              <button
-                onClick={closeModal}
-                className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-              >
-                &times;
-              </button>
-
-              {activeForm === "user" && <CreateUserForm />}
-              {activeForm === "car" && <CreateCarForm />}
-              {activeForm === "rental" && <CreateRentalForm />}
-            </div>
-          </div>
-        )}
-
         <Footer />
       </div>
+      {activeForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded p-6 max-w-md w-full relative">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+            >
+              &times;
+            </button>
+
+            {activeForm === "user" && <CreateUserForm />}
+            {activeForm === "car" && <CreateCarForm />}
+            {activeForm === "rental" && <CreateRentalForm />}
+          </div>
+        </div>
+      )}
     </>
   );
 }

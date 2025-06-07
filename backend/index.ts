@@ -106,7 +106,6 @@ async function createNewRental(data: Rental) {
     throw new Error("User already has this car rented.");
   }
 
-  // Optional: Also check if the car is currently rented globally
   const car = await prisma.car.findUnique({
     where: { id: data.carId },
   });
@@ -187,6 +186,29 @@ serve({
           status: 400,
         });
       }
+    }
+
+    /* POST - return a car */
+    if (method === "POST" && pathname.startsWith("/api/returnrental")) {
+      const id = parseInt(pathname.split("/").pop() || "");
+      if (isNaN(id)) return new Response("Invalid rental ID", { status: 400 });
+      await returnRental(id);
+      return new Response("Rental returned", { status: 200 });
+    }
+
+    async function returnRental(id: number) {
+      const rental = await prisma.rental.update({
+        where: { id },
+        data: { returnedAt: new Date() },
+        include: { car: true },
+      });
+
+      await prisma.car.update({
+        where: { id: rental.carId },
+        data: { isRented: false },
+      });
+
+      console.log(`Rental ${id} marked as returned`);
     }
 
     /* Get signle car */

@@ -5,13 +5,24 @@ To do:
 UI:
 Frontpage:
 *New Rental
+*Create user
+*Create car
+*Create rental
 
-Create new rental
-*Find bookings
-**Find booking
-**Find user
-**Find car
-**Delete rental
+*See bookings 
+**Long bar, where i can define, what i want to search for. 
+**Default display rentals
+**Searches:
+*** user - pressable - see user and earlier rentals
+*** car - pressable - see user and earlier rentals
+*** rental - pressable - see user and earlier rentals
+
+Tests: 
+All API entries work
+Entry to db works
+Delete works
+Booking works 
+
 
 Unit tests - særligt for at se, om requests går igennem.
 /////////////////////////////////////////////

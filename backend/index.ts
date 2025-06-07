@@ -24,8 +24,9 @@ interface Rental {
 }
 
 const defaultHeaders = {
-  "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type,Authorization",
 };
 
 async function handleGetAllUsers() {
@@ -64,7 +65,12 @@ async function handleGetAllCars() {
 }
 
 async function handleGetAllRentals() {
-  const rentals = await prisma.rental.findMany();
+  const rentals = await prisma.rental.findMany({
+    include: {
+      user: true,
+      car: true,
+    },
+  });
   return new Response(JSON.stringify(rentals), {
     headers: defaultHeaders,
   });
@@ -87,6 +93,29 @@ async function createNewCar(data: CarInput) {
 async function createNewRental(data: Rental) {
   const timeStamp = new Date();
 
+  // Check if the user already has this car rented and not returned
+  const existingRental = await prisma.rental.findFirst({
+    where: {
+      userId: data.userId,
+      carId: data.carId,
+      returnedAt: null,
+    },
+  });
+
+  if (existingRental) {
+    throw new Error("User already has this car rented.");
+  }
+
+  // Optional: Also check if the car is currently rented globally
+  const car = await prisma.car.findUnique({
+    where: { id: data.carId },
+  });
+
+  if (car?.isRented) {
+    throw new Error("This car is already rented.");
+  }
+
+  // Proceed to create the rental
   await prisma.car.update({
     where: { id: data.carId },
     data: { isRented: true },
@@ -132,6 +161,13 @@ serve({
   async fetch(request) {
     const { method } = request;
     const { pathname } = new URL(request.url);
+
+    if (method === "OPTIONS") {
+      return new Response(null, {
+        status: 200,
+        headers: defaultHeaders,
+      });
+    }
 
     /* ---------------- */
     /* Cleans request strings for id's */
@@ -220,8 +256,8 @@ serve({
         const json = (await request.json()) as Rental;
         await createNewRental(json);
         return new Response("Car is rented", { status: 201 });
-      } catch {
-        return new Response("Server error", { status: 500 });
+      } catch (error: any) {
+        return new Response(error.message || "Server error", { status: 400 });
       }
     }
 

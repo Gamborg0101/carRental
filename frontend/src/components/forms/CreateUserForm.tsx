@@ -14,11 +14,11 @@ export default function CreateUserForm() {
       body: JSON.stringify({ firstname, lastname, phonenumber, email }),
     })
       .then((response) => {
-        if (response.ok)
-          alert(
-            "User created!"
-          ); /* .ok checks if the request is in the 200-299 range. Returns boolean */
-        else alert("Error creating user");
+        /* .ok checks if the request is in the 200-299 range. Returns boolean */
+        if (response.ok) alert("User created!");
+        else {
+          alert("Error creating user");
+        }
       })
       .catch(() => {
         alert("Error creating user");

@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
 
-type HeaderProps = {
-  onCreateRental?: () => void;
-  onLookupBookings?: () => void;
-};
-
 export default function Header() {
   return (
     <header className="grid grid-cols-3 items-center h-16 bg-blue-500 px-6">

@@ -13,6 +13,10 @@ export default function Modal({
   onClose,
   onDelete,
 }: ModalProps) {
+  const hasActiveRentals = (rentals: any[]) => {
+    return rentals.some((rental: any) => !rental.returnedAt);
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
@@ -42,7 +46,8 @@ export default function Modal({
               <p>
                 <strong>Phone:</strong> {item.phonenumber}
               </p>
-              {item.rentals?.some((r: any) => !r.returnedAt) && (
+              {/* I ended here.  */}
+              {hasActiveRentals(item.rentals ?? []) && (
                 <p className="text-green-600">
                   <strong>Active rental:</strong> Yes
                 </p>

@@ -36,27 +36,6 @@ async function handleGetAllUsers() {
   });
 }
 
-async function handleGetSingleUser(id: number) {
-  const user = await prisma.user.findUnique({ where: { id } });
-  return new Response(JSON.stringify(user), {
-    headers: defaultHeaders,
-  });
-}
-
-async function handleGetSingleCar(id: number) {
-  const car = await prisma.car.findUnique({ where: { id } });
-  return new Response(JSON.stringify(car), {
-    headers: defaultHeaders,
-  });
-}
-
-async function handleGetSingleRental(id: number) {
-  const rental = await prisma.rental.findUnique({ where: { id } });
-  return new Response(JSON.stringify(rental), {
-    headers: defaultHeaders,
-  });
-}
-
 async function handleGetAllCars() {
   const cars = await prisma.car.findMany();
   return new Response(JSON.stringify(cars), {
@@ -169,24 +148,6 @@ serve({
     }
 
     /* ---------------- */
-    /* Cleans request strings for id's */
-    function idGenerator(url: URL) {
-      const id = url.searchParams.get("id");
-      if (id === null || id === "") throw new Error("Invalid ID");
-      return parseInt(id);
-    }
-
-    /* GET - single user */
-    if (method == "GET" && pathname.startsWith("/api/getuser/id")) {
-      try {
-        const id = idGenerator(new URL(request.url));
-        return handleGetSingleUser(id);
-      } catch {
-        return new Response("ID parameter is required and must be valid", {
-          status: 400,
-        });
-      }
-    }
 
     /* POST - return a car */
     if (method === "POST" && pathname.startsWith("/api/returnrental")) {
@@ -209,30 +170,6 @@ serve({
       });
 
       console.log(`Rental ${id} marked as returned`);
-    }
-
-    /* Get signle car */
-    if (method == "GET" && pathname.startsWith("/api/getcar/id")) {
-      try {
-        const id = idGenerator(new URL(request.url));
-        return handleGetSingleCar(id);
-      } catch {
-        return new Response("ID parameter is required and must be valid", {
-          status: 400,
-        });
-      }
-    }
-
-    /* Get single rental*/
-    if (method == "GET" && pathname.startsWith("/api/getrental/id")) {
-      try {
-        const id = idGenerator(new URL(request.url));
-        return handleGetSingleRental(id);
-      } catch {
-        return new Response("ID parameter is required and must be valid", {
-          status: 400,
-        });
-      }
     }
 
     /* GET - all users  */

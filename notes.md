@@ -2,27 +2,16 @@
 
 To do:
 
-UI:
-Frontpage:
-*New Rental
-*Create user
-*Create car
-*Create rental
+Need to fix big bug
+Need to keep reading in Modal and further
+Need to fix return car-bug - i think it might be because of when useEffect updates
+Makes tests
 
-*See bookings 
-**Long bar, where i can define, what i want to search for. 
-**Default display rentals
-**Searches:
-*** user - pressable - see user and earlier rentals
-*** car - pressable - see user and earlier rentals
-*** rental - pressable - see user and earlier rentals
-
-Tests: 
+Tests:
 All API entries work
 Entry to db works
 Delete works
-Booking works 
-
+Booking works
 
 Unit tests - særligt for at se, om requests går igennem.
 /////////////////////////////////////////////

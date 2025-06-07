@@ -46,7 +46,7 @@ export default function Modal({
               <p>
                 <strong>Phone:</strong> {item.phonenumber}
               </p>
-              {/* I ended here.  */}
+              
               {hasActiveRentals(item.rentals ?? []) && (
                 <p className="text-green-600">
                   <strong>Active rental:</strong> Yes

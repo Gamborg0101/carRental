@@ -1,43 +1,64 @@
 import { useState, useEffect } from "react";
 
+interface User {
+  id: number;
+  firstname: string;
+  lastname: string;
+}
+
+interface Car {
+  id: number;
+  maker: string;
+  model: string;
+  isRented: boolean;
+}
+
 export default function CreateRentalForm() {
   const [userId, setUserId] = useState("");
   const [carId, setCarId] = useState("");
-  const [users, setUsers] = useState<
-    { id: number; firstname: string; lastname: string }[]
-  >([]);
-  const [cars, setCars] = useState<
-    { id: number; maker: string; model: string; isRented: boolean }[]
-  >([]);
+  const [users, setUsers] = useState<User[]>(
+    []
+  ); /* State is an array of user objects - TS needs to know what is inside of the array   */
+  const [cars, setCars] = useState<Car[]>([]);
+
+  function getAvailableCars(cars: Car[]): Car[] {
+    return cars.filter((car) => !car.isRented); /* Returns all true elements */
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      const usersRes = await fetch("http://localhost:6543/api/getusers");
-      const usersData = await usersRes.json();
-      setUsers(usersData);
+    fetch("http://localhost:6543/api/getusers").then((users) => users.json());
+  });
 
-      const carsRes = await fetch("http://localhost:6543/api/getcars");
-      const carsData = await carsRes.json();
-      setCars(carsData.filter((car: any) => !car.isRented));
-    }
-    fetchData();
+  /* Create a rental */
+  useEffect(() => {
+    fetch("http://localhost:6543/api/getusers")
+      .then((res) => res.json())
+      .then((usersData) => setUsers(usersData));
+
+    fetch("http://localhost:6543/api/getcars")
+      .then((res) => res.json())
+      .then((carsData) => setCars(getAvailableCars(carsData)));
   }, []);
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const response = await fetch("http://localhost:6543/api/createrental", {
+
+    fetch("http://localhost:6543/api/createrental", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: parseInt(userId),
-        carId: parseInt(carId),
+        userId: Number(userId),
+        carId: Number(carId),
       }),
-    });
-    if (response.ok) alert("Rental created!");
-    else {
-      const errorText = await response.text();
-      alert("Error: " + errorText);
-    }
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Rental created!");
+        }
+      })
+      .catch((error) => {
+        console.error("Rental creation failed:", error);
+      });
   }
 
   return (
@@ -63,7 +84,7 @@ export default function CreateRentalForm() {
       </select>
 
       <label htmlFor="car-select" className="font-semibold">
-        Select Car:
+        {/* Hidden selector for car */}
       </label>
       <select
         id="car-select"

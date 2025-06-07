@@ -46,7 +46,7 @@ export default function CreateBooking() {
           <div className="bg-white rounded p-6 max-w-md w-full relative">
             <button
               onClick={closeModal}
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none"
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-3xl font-bold leading-none right-1 top-0"
               aria-label="Close modal"
             >
               &times;

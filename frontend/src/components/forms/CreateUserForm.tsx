@@ -6,15 +6,23 @@ export default function CreateUserForm() {
   const [phonenumber, setPhonenumber] = useState("");
   const [email, setEmail] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const response = await fetch("http://localhost:6543/api/createuser", {
+    fetch("http://localhost:6543/api/createuser", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstname, lastname, phonenumber, email }),
-    });
-    if (response.ok) alert("User created!");
-    else alert("Error creating user");
+    })
+      .then((response) => {
+        if (response.ok)
+          alert(
+            "User created!"
+          ); /* .ok checks if the request is in the 200-299 range. Returns boolean */
+        else alert("Error creating user");
+      })
+      .catch(() => {
+        alert("Error creating user");
+      });
   }
 
   return (

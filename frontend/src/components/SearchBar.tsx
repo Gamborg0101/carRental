@@ -42,15 +42,18 @@ export default function SearchBar({
     }
     return [];
   }
+  //Lav noget .env ligesom dette: await fetch(env.get(SERVER_BASE) + `${endpoint}`, {
+  /* Lav en .env fil med variabler, som kan afspejlse endpoints. */
+  /* Serpation of concerns */
 
   const handleDelete = async (id: number) => {
+    if (window.confirm("Are you sure you want to delete it?") !== true) {
+      return;
+    }
     try {
       await fetch(`http://localhost:6543/api/deletecar/${id}`, {
         method: "DELETE",
       });
-      //Lav noget .env ligesom dette: await fetch(env.get(SERVER_BASE) + `${endpoint}`, {
-      /* Lav en .env fil med variabler, som kan afspejlse endpoints. */
-      /* Serpation of concerns */
 
       refreshData(); // This just updates data without reloading
     } catch (error) {
@@ -63,7 +66,7 @@ export default function SearchBar({
   }
 
   async function handleReturnRental(id: number) {
-    if (window.confirm("Are you sure?") !== true) {
+    if (window.confirm("Are you sure you want return the car?") !== true) {
       return;
     }
     // Return the car

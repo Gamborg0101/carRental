@@ -29,7 +29,11 @@ const defaultHeaders = {
 };
 
 async function handleGetAllUsers() {
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    include: {
+      rentals: true,
+    },
+  });
   return new Response(JSON.stringify(users), {
     headers: defaultHeaders,
   });
@@ -249,9 +253,9 @@ serve({
           headers: defaultHeaders,
         });
       }
-      return new Response("Not Found", { status: 404 });
+      return new Response("Not Found", { status: 500 });
     }
-    return new Response("Not Found", { status: 404 });
+    return new Response("Not Found", { status: 500 });
   },
 });
 

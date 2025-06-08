@@ -52,9 +52,13 @@ export default function CreateBooking() {
               &times;
             </button>
 
-            {activeForm === "user" && <CreateUserForm />}
-            {activeForm === "car" && <CreateCarForm />}
-            {activeForm === "rental" && <CreateRentalForm />}
+            {activeForm === "user" && (
+              <CreateUserForm closeModal={closeModal} />
+            )}
+            {activeForm === "car" && <CreateCarForm closeModal={closeModal} />}
+            {activeForm === "rental" && (
+              <CreateRentalForm closeModal={closeModal} />
+            )}
           </div>
         </div>
       )}

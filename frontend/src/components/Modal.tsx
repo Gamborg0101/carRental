@@ -13,9 +13,13 @@ export default function Modal({
   onClose,
   onDelete,
 }: ModalProps) {
-  const hasActiveRentals = (rentals: any[]) => {
-    return rentals.some((rental: any) => !rental.returnedAt);
-  };
+  const isCarOrUser = category === "cars" || category === "users";
+  const hasUnreturnedRentals =
+    isCarOrUser && item.rentals?.some((rental: any) => !rental.returnedAt);
+  const deleteMessage =
+    category === "cars"
+      ? "The car is rented out and cannot be deleted."
+      : "The user has an active rental and cannot be deleted.";
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -46,12 +50,6 @@ export default function Modal({
               <p>
                 <strong>Phone:</strong> {item.phonenumber}
               </p>
-
-              {hasActiveRentals(item.rentals ?? []) && (
-                <p className="text-green-600">
-                  <strong>Active rental:</strong> Yes
-                </p>
-              )}
             </>
           )}
 
@@ -105,15 +103,19 @@ export default function Modal({
           )}
         </div>
 
-        <button
-          onClick={async () => {
-            await onDelete(item.id);
-            onClose();
-          }}
-          className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-        >
-          Delete
-        </button>
+        {hasUnreturnedRentals ? (
+          <p className="mt-4 text-red-600 font-semibold">{deleteMessage}</p>
+        ) : (
+          <button
+            onClick={async () => {
+              await onDelete(item.id);
+              onClose();
+            }}
+            className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );

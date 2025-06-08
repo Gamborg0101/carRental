@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export default function CreateUserForm() {
+interface CreateUserFormProps {
+  closeModal: () => void;
+}
+
+export default function CreateUserForm({ closeModal }: CreateUserFormProps) {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
@@ -14,9 +18,10 @@ export default function CreateUserForm() {
       body: JSON.stringify({ firstname, lastname, phonenumber, email }),
     })
       .then((response) => {
-        /* .ok checks if the request is in the 200-299 range. Returns boolean */
-        if (response.ok) alert("User created!");
-        else {
+        if (response.ok) {
+          alert("User created!");
+          closeModal();
+        } else {
           alert("Error creating user");
         }
       })

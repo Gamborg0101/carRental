@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export default function CreateCarForm() {
+interface CreateCarFormProps {
+  closeModal: () => void;
+}
+
+export default function CreateCarForm({ closeModal }: CreateCarFormProps) {
   const [maker, setMaker] = useState("");
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
@@ -13,8 +17,13 @@ export default function CreateCarForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ maker, model, year }),
     });
-    if (response.ok) alert("Car created!");
-    else alert("Error creating car");
+    if (response.ok) {
+      
+      alert("Car created!");
+      closeModal();
+    } else {
+      alert("Error creating car");
+    }
   }
 
   return (

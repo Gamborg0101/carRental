@@ -12,7 +12,13 @@ interface Car {
   model: string;
 }
 
-export default function CreateRentalForm() {
+interface CreateRentalFormProps {
+  closeModal: () => void;
+}
+
+export default function CreateRentalForm({
+  closeModal,
+}: CreateRentalFormProps) {
   const [userId, setUserId] = useState("");
   const [carId, setCarId] = useState("");
   const [users, setUsers] = useState<User[]>(
@@ -23,10 +29,6 @@ export default function CreateRentalForm() {
   function getAvailableCars(cars: Car[]): Car[] {
     return cars;
   }
-
-  useEffect(() => {
-    fetch("http://localhost:6543/api/getusers").then((users) => users.json());
-  });
 
   /* Create a rental */
   useEffect(() => {
@@ -51,15 +53,15 @@ export default function CreateRentalForm() {
         userId: Number(userId),
         carId: Number(carId),
       }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log("Rental created!");
-        }
-      })
-      .catch((error) => {
-        console.error("Rental creation failed:", error);
-      });
+    }).then((response) => {
+      if (response.ok) {
+        
+        alert("Rental created!");
+        closeModal(); 
+      } else {
+        alert("Error creating rental");
+      }
+    });
   }
 
   return (

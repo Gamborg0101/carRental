@@ -23,7 +23,6 @@ model Car{
   maker String
   model String
   year String
-  isRented Boolean /* Skal fjernes, fordi car skal ikke tage stilling til at den er udlejet.*/
   rentals Rental[]
 }
 

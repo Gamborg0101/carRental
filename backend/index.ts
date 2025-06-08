@@ -15,7 +15,6 @@ interface CarInput {
   model: string;
   maker: string;
   year: string;
-  isRented: boolean;
 }
 
 interface Rental {
@@ -125,7 +124,14 @@ async function deleteRental(id: number) {
   console.log(`Rental ${id} is deleted`);
 }
 
-/* ENDPOINTS - new file? - maybe files for each type of request */
+async function returnRental(id: number) {
+  const rental = await prisma.rental.update({
+    where: { id },
+    data: { returnedAt: new Date() },
+    include: { car: true },
+  });
+  console.log(`Rental ${id} marked as returned`);
+}
 
 serve({
   port: PORT,
@@ -151,21 +157,6 @@ serve({
         status: 200,
         headers: defaultHeaders,
       });
-    }
-
-    async function returnRental(id: number) {
-      const rental = await prisma.rental.update({
-        where: { id },
-        data: { returnedAt: new Date() },
-        include: { car: true },
-      });
-
-      await prisma.car.update({
-        where: { id: rental.carId },
-        data: { isRented: false },
-      });
-
-      console.log(`Rental ${id} marked as returned`);
     }
 
     /* GET - all users  */
@@ -225,10 +216,6 @@ serve({
         return new Response(error.message || "Server error", { status: 400 });
       }
     }
-
-    /*
-    Make a determinator function for delete?
-    */
 
     /* DELETE */
     if (method == "DELETE") {

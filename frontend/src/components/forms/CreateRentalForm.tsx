@@ -22,7 +22,9 @@ export default function CreateRentalForm() {
   const [cars, setCars] = useState<Car[]>([]);
 
   function getAvailableCars(cars: Car[]): Car[] {
-    return cars.filter((car) => !car.isRented); /* Returns all true elements */
+    return cars.filter(
+      (car) => !car.isRented
+    ); /* Skal laves om, fordi isRented bruger jeg ikke længere. */
   }
 
   useEffect(() => {
@@ -45,7 +47,11 @@ export default function CreateRentalForm() {
 
     fetch("http://localhost:6543/api/createrental", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type,Authorization",
+      },
       body: JSON.stringify({
         userId: Number(userId),
         carId: Number(carId),

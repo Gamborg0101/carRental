@@ -37,7 +37,11 @@ async function handleGetAllUsers() {
 }
 
 async function handleGetAllCars() {
-  const cars = await prisma.car.findMany();
+  const cars = await prisma.car.findMany({
+    include: {
+      rentals: true,
+    },
+  });
   return new Response(JSON.stringify(cars), {
     headers: defaultHeaders,
   });
@@ -75,29 +79,19 @@ async function createNewRental(data: Rental) {
   // Check if the user already has this car rented and not returned
   const existingRental = await prisma.rental.findFirst({
     where: {
-      userId: data.userId,
       carId: data.carId,
       returnedAt: null,
+    },
+    include: {
+      car: true /* Forstå det her 100%  */,
     },
   });
 
   if (existingRental) {
-    throw new Error("User already has this car rented.");
+    throw new Error(
+      "User " + existingRental.userId + " already has this car rented."
+    );
   }
-
-  const car = await prisma.car.findUnique({
-    where: { id: data.carId },
-  });
-
-  if (car?.isRented) {
-    throw new Error("This car is already rented.");
-  }
-
-  // Proceed to create the rental
-  await prisma.car.update({
-    where: { id: data.carId },
-    data: { isRented: true },
-  });
 
   await prisma.rental.create({
     data: {
@@ -107,7 +101,6 @@ async function createNewRental(data: Rental) {
       returnedAt: null,
     },
   });
-
   console.log("Rental created");
 }
 
@@ -139,8 +132,8 @@ serve({
   async fetch(request) {
     const { method } = request;
     const { pathname } = new URL(request.url);
-
     if (method === "OPTIONS") {
+      /* Preflight requests */
       return new Response(null, {
         status: 200,
         headers: defaultHeaders,
@@ -154,7 +147,10 @@ serve({
       const id = parseInt(pathname.split("/").pop() || "");
       if (isNaN(id)) return new Response("Invalid rental ID", { status: 400 });
       await returnRental(id);
-      return new Response("Rental returned", { status: 200 });
+      return new Response("Rental returned", {
+        status: 200,
+        headers: defaultHeaders,
+      });
     }
 
     async function returnRental(id: number) {
@@ -174,6 +170,7 @@ serve({
 
     /* GET - all users  */
     if (method == "GET" && pathname == "/api/getusers") {
+      /* Hvis jeg skriver stort API - det skal fikses */
       return handleGetAllUsers();
     }
 
@@ -192,7 +189,10 @@ serve({
       try {
         const json = (await request.json()) as UserInput; // Assert the value - no guarantees
         await createNewUser(json);
-        return new Response("User created", { status: 201 });
+        return new Response("User created", {
+          status: 201,
+          headers: defaultHeaders,
+        });
       } catch {
         return new Response("Server error", { status: 500 });
       }
@@ -203,7 +203,10 @@ serve({
       try {
         const json = (await request.json()) as CarInput;
         await createNewCar(json);
-        return new Response("Car created", { status: 201 });
+        return new Response("Car created", {
+          status: 201,
+          headers: defaultHeaders,
+        });
       } catch {
         return new Response("Server error", { status: 500 });
       }
@@ -214,7 +217,10 @@ serve({
       try {
         const json = (await request.json()) as Rental;
         await createNewRental(json);
-        return new Response("Car is rented", { status: 201 });
+        return new Response("Car is rented", {
+          status: 201,
+          headers: defaultHeaders,
+        });
       } catch (error: any) {
         return new Response(error.message || "Server error", { status: 400 });
       }
@@ -232,20 +238,29 @@ serve({
       if (match) {
         const id = Number(match[1]);
         await deleteUser(id);
-        return new Response("User deleted", { status: 200 });
+        return new Response("User deleted", {
+          /* Extract til metoder */ status: 200,
+          headers: defaultHeaders,
+        });
       }
       match = pathname.match(/^\/api\/deletecar\/(\d+)$/);
       if (match) {
         const id = Number(match[1]);
         await deleteCar(id);
-        return new Response("Car deleted", { status: 200 });
+        return new Response("Car deleted", {
+          status: 200,
+          headers: defaultHeaders,
+        });
       }
 
       match = pathname.match(/^\/api\/deleterental\/(\d+)$/);
       if (match) {
         const id = Number(match[1]);
         await deleteRental(id);
-        return new Response("Rental deleted", { status: 200 });
+        return new Response("Rental deleted", {
+          status: 200,
+          headers: defaultHeaders,
+        });
       }
       return new Response("Not Found", { status: 404 });
     }

@@ -46,7 +46,7 @@ export default function Modal({
               <p>
                 <strong>Phone:</strong> {item.phonenumber}
               </p>
-              
+
               {hasActiveRentals(item.rentals ?? []) && (
                 <p className="text-green-600">
                   <strong>Active rental:</strong> Yes
@@ -102,7 +102,10 @@ export default function Modal({
         </div>
 
         <button
-          onClick={() => onDelete(item.id)}
+          onClick={async () => {
+            await onDelete(item.id);
+            onClose();
+          }}
           className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
         >
           Delete

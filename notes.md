@@ -1,11 +1,14 @@
 /////////////////////////////////////////////
 
-To do:
+# To do:
 
-Need to fix big bug
-Need to keep reading in Modal and further
-Need to fix return car-bug - i think it might be because of when useEffect updates
-Makes tests
+- Brug kun bun run
+- When going into new search param - just refresh automatically.
+- Need to fix redirection
+- Need to keep reading in Modal and further
+- Need to fix return car-bug - i think it might be because of when useEffect updates
+- Makes tests - end to end.
+- Lav en rental
 
 Tests:
 All API entries work
@@ -17,7 +20,7 @@ Unit tests - særligt for at se, om requests går igennem.
 /////////////////////////////////////////////
 
 Prisma migrate:
-prisma migrate dev --name init
+`prisma migrate dev --name init`
 
 Run docker:
 docker compose up

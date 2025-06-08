@@ -9,28 +9,28 @@ export default function GetBookings() {
   const [rentals, setRentals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [usersRes, carsRes, rentalsRes] = await Promise.all([
-          fetch("http://localhost:6543/api/getusers"),
-          fetch("http://localhost:6543/api/getcars"),
-          fetch("http://localhost:6543/api/getrentals"),
-        ]);
+  const fetchData = async () => {
+    try {
+      const [usersRes, carsRes, rentalsRes] = await Promise.all([
+        fetch("http://localhost:6543/api/getusers"),
+        fetch("http://localhost:6543/api/getcars"),
+        fetch("http://localhost:6543/api/getrentals"),
+      ]);
 
-        const usersData = await usersRes.json();
-        const carsData = await carsRes.json();
-        const rentalsData = await rentalsRes.json();
+      const usersData = await usersRes.json();
+      const carsData = await carsRes.json();
+      const rentalsData = await rentalsRes.json();
 
-        setUsers(usersData);
-        setCars(carsData);
-        setRentals(rentalsData);
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch data:", err);
-      }
+      setUsers(usersData);
+      setCars(carsData);
+      setRentals(rentalsData);
+      setLoading(false);
+    } catch (err) {
+      console.error("Failed to fetch data:", err);
     }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -39,7 +39,12 @@ export default function GetBookings() {
   return (
     <div className="app-container">
       <Header />
-      <SearchBar users={users} cars={cars} rentals={rentals} />
+      <SearchBar
+        users={users}
+        cars={cars}
+        rentals={rentals}
+        refreshData={fetchData}
+      />
       <Footer />
     </div>
   );

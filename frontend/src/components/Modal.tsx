@@ -1,12 +1,79 @@
 import React from "react";
 
 type ModalProps = {
-  item: any;
+  item: any; //Else it would have to be Usertype | Cartype | Rentaltype
   category: string;
   onClose: () => void;
   onDelete: (id: number) => void;
 };
 
+function renderUser(item: any) {
+  return (
+    <>
+      <p>
+        <strong>ID:</strong> {item.id}
+      </p>
+      <p>
+        <strong>Name:</strong> {item.firstname} {item.lastname}
+      </p>
+      <p>
+        <strong>Email:</strong> {item.email}
+      </p>
+      <p>
+        <strong>Phone:</strong> {item.phonenumber}
+      </p>
+    </>
+  );
+}
+
+function renderCar(item: any) {
+  const rented = item.rentals?.some((r: any) => !r.returnedAt) ? "Yes" : "No";
+  return (
+    <>
+      <p>
+        <strong>ID:</strong> {item.id}
+      </p>
+      <p>
+        <strong>Model:</strong> {item.model}
+      </p>
+      <p>
+        <strong>Maker:</strong> {item.maker}
+      </p>
+      <p>
+        <strong>Year:</strong> {item.year}
+      </p>
+      <p>
+        <strong>Rented:</strong> {rented}
+      </p>
+    </>
+  );
+}
+
+function renderRental(item: any) {
+  return (
+    <>
+      <p>
+        <strong>ID:</strong> {item.id}
+      </p>
+      <p>
+        <strong>User:</strong> {item.user?.firstname} {item.user?.lastname}
+      </p>
+      <p>
+        <strong>Car:</strong> {item.car?.model}
+      </p>
+      <p>
+        <strong>Rented at:</strong> {new Date(item.rentedAt).toLocaleString()}
+      </p>
+      <p>
+        <strong>Returned:</strong>{" "}
+        {item.returnedAt
+          ? new Date(item.returnedAt).toLocaleString()
+          : "Not returned"}
+      </p>
+    </>
+  );
+}
+/* Calling from Searchbar */
 export default function Modal({
   item,
   category,
@@ -20,6 +87,11 @@ export default function Modal({
     category === "cars"
       ? "The car is rented out and cannot be deleted."
       : "The user has an active rental and cannot be deleted.";
+
+  let content;
+  if (category === "users") content = renderUser(item);
+  else if (category === "cars") content = renderCar(item);
+  else if (category === "rentals") content = renderRental(item);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -35,73 +107,7 @@ export default function Modal({
           {category} Details
         </h2>
 
-        <div className="space-y-2">
-          {category === "users" && (
-            <>
-              <p>
-                <strong>ID:</strong> {item.id}
-              </p>
-              <p>
-                <strong>Name:</strong> {item.firstname} {item.lastname}
-              </p>
-              <p>
-                <strong>Email:</strong> {item.email}
-              </p>
-              <p>
-                <strong>Phone:</strong> {item.phonenumber}
-              </p>
-            </>
-          )}
-
-          {category === "cars" && (
-            <>
-              <p>
-                <strong>ID:</strong> {item.id}
-              </p>
-              <p>
-                <strong>Model:</strong> {item.model}
-              </p>
-              <p>
-                <strong>Maker:</strong> {item.maker}
-              </p>
-              <p>
-                <strong>Year:</strong> {item.year}
-              </p>
-              <p>
-                <strong>Rented:</strong>{" "}
-                {item.rentals &&
-                item.rentals.some((rented: any) => !rented.returnedAt)
-                  ? "Yes"
-                  : "No"}
-              </p>
-            </>
-          )}
-
-          {category === "rentals" && (
-            <>
-              <p>
-                <strong>ID:</strong> {item.id}
-              </p>
-              <p>
-                <strong>User:</strong> {item.user?.firstname}{" "}
-                {item.user?.lastname}
-              </p>
-              <p>
-                <strong>Car:</strong> {item.car?.model}
-              </p>
-              <p>
-                <strong>Rented at:</strong>{" "}
-                {new Date(item.rentedAt).toLocaleString()}
-              </p>
-              <p>
-                <strong>Returned:</strong>{" "}
-                {item.returnedAt
-                  ? new Date(item.returnedAt).toLocaleString()
-                  : "Not returned"}
-              </p>
-            </>
-          )}
-        </div>
+        <div className="space-y-2">{content}</div>
 
         {hasUnreturnedRentals ? (
           <p className="mt-4 text-red-600 font-semibold">{deleteMessage}</p>

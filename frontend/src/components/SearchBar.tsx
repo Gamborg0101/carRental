@@ -20,42 +20,42 @@ export default function SearchBar({
   const [category, setCategory] = useState("users");
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
-  function filter() {
-    if (category === "users") {
-      return users.filter((user) =>
-        user.firstname?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  const filter = () => {
+    const query = searchQuery.toLowerCase();
+    switch (category) {
+      case "users":
+        if (!users || !Array.isArray(users)) return [];
+        return users.filter((user) =>
+          user.firstname.toLowerCase().includes(query)
+        );
+
+      case "cars":
+        if (!cars || !Array.isArray(cars)) return [];
+        return cars.filter((car) => car.model.toLowerCase().includes(query));
+        
+      case "rentals":
+        if (!rentals || !Array.isArray(rentals)) return [];
+        return rentals.filter(
+          (rental) =>
+            rental.user?.firstname?.toLowerCase().includes(query) ||
+            rental.car?.model?.toLowerCase().includes(query)
+        );
+      default:
+        return [];
     }
-    if (category === "cars") {
-      return cars.filter((car) =>
-        car.model?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    if (category === "rentals") {
-      return rentals.filter(
-        (rental) =>
-          rental.user?.firstname
-            ?.toLowerCase()
-            .includes(searchQuery.toLowerCase()) ||
-          rental.car?.model?.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    return [];
-  }
+  };
   //Lav noget .env ligesom dette: await fetch(env.get(SERVER_BASE) + `${endpoint}`, {
   /* Lav en .env fil med variabler, som kan afspejlse endpoints. */
   /* Serpation of concerns */
 
   const handleDelete = async (id: number) => {
-    if (window.confirm("Are you sure you want to delete it?") !== true) {
-      return;
-    }
+    if (!window.confirm("Are you sure you want to delete it?")) return;
+
     try {
       await fetch(`http://localhost:6543/api/deletecar/${id}`, {
         method: "DELETE",
       });
-
-      refreshData(); // This just updates data without reloading
+      refreshData();
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -65,22 +65,25 @@ export default function SearchBar({
     setSelectedItem(item);
   }
 
-  async function handleReturnRental(id: number) {
-    if (window.confirm("Are you sure you want return the car?") !== true) {
-      return;
+  const handleReturnRental = async (id: number) => {
+    if (!window.confirm("Are you sure you want to return the car?")) return;
+
+    try {
+      /* Return rental */
+      await fetch(`http://localhost:6543/api/returnrental/${id}`, {
+        method: "POST",
+      });
+      /* Delete rental */
+      await fetch(`http://localhost:6543/api/deleterental/${id}`, {
+        method: "DELETE",
+      });
+      alert("Car returned and rental deleted");
+      setSelectedItem(null);
+      refreshData();
+    } catch (error) {
+      console.error("Return rental failed", error);
     }
-    // Return the car
-    await fetch(`http://localhost:6543/api/returnrental/${id}`, {
-      method: "POST",
-    });
-    // Delete the rental
-    await fetch(`http://localhost:6543/api/deleterental/${id}`, {
-      method: "DELETE",
-    });
-    alert("Car returned and rental deleted");
-    setSelectedItem(null);
-    refreshData();
-  }
+  };
 
   return (
     <div className="p-4">

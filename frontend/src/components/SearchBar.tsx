@@ -66,11 +66,11 @@ export default function SearchBar({
     if (window.confirm("Are you sure?") !== true) {
       return;
     }
-    // 1. Return the car
+    // Return the car
     await fetch(`http://localhost:6543/api/returnrental/${id}`, {
       method: "POST",
     });
-    // 2. Delete the rental
+    // Delete the rental
     await fetch(`http://localhost:6543/api/deleterental/${id}`, {
       method: "DELETE",
     });

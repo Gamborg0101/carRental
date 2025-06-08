@@ -70,7 +70,11 @@ export default function Modal({
                 <strong>Year:</strong> {item.year}
               </p>
               <p>
-                <strong>Rented:</strong> {item.isRented ? "Yes" : "No"}
+                <strong>Rented:</strong>{" "}
+                {item.rentals &&
+                item.rentals.some((rented: any) => !rented.returnedAt)
+                  ? "Yes"
+                  : "No"}
               </p>
             </>
           )}

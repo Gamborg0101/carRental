@@ -17,6 +17,12 @@ Delete works
 Booking works
 
 Unit tests - særligt for at se, om requests går igennem.
+
+Documentation:
+
+- Migrate db:
+  - npx prisma migrate reset
+
 /////////////////////////////////////////////
 
 Prisma migrate:

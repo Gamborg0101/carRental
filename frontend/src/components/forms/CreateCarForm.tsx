@@ -5,15 +5,13 @@ export default function CreateCarForm() {
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
 
-
-  
   /* Create a car */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const response = await fetch("http://localhost:6543/api/createcar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ maker, model, year, isRented: false }),
+      body: JSON.stringify({ maker, model, year }),
     });
     if (response.ok) alert("Car created!");
     else alert("Error creating car");

@@ -10,7 +10,6 @@ interface Car {
   id: number;
   maker: string;
   model: string;
-  isRented: boolean;
 }
 
 export default function CreateRentalForm() {
@@ -22,9 +21,7 @@ export default function CreateRentalForm() {
   const [cars, setCars] = useState<Car[]>([]);
 
   function getAvailableCars(cars: Car[]): Car[] {
-    return cars.filter(
-      (car) => !car.isRented
-    ); /* Skal laves om, fordi isRented bruger jeg ikke længere. */
+    return cars;
   }
 
   useEffect(() => {
@@ -48,9 +45,7 @@ export default function CreateRentalForm() {
     fetch("http://localhost:6543/api/createrental", {
       method: "POST",
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type,Authorization",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         userId: Number(userId),

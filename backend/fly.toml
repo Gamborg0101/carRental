@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for carrentalbackend-sparkling-flower-6877 on 2025-06-09T21:56:58+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'carrentalbackend-sparkling-flower-6877'
+primary_region = 'arn'
+
+[build]
+
+[deploy]
+  release_command = 'bunx prisma migrate deploy'
+  seed_command = 'tsx prisma/seed.ts'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

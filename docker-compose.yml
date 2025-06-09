@@ -1,11 +1,16 @@
+version: "3.8"
+
 services:
   database:
-    image: postgres:13-alpine
+    image: postgres:13
     environment:
-      POSTGRES_PASSWORD: secret
-    ports:
-      - 5432:5432
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: carrental_db
     volumes:
-      - db:/var/lib/postgresql/data
+      - carrental_db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
 volumes:
-  db:
+  carrental_db:

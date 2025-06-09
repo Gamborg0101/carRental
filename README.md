@@ -1,4 +1,4 @@
-<h1>Description of Role</h1>
+<h3>Description of Role</h3>
 I chose the <strong>Product Engineer</strong> role because it aligns well with my interests and skillset. In this role, I am responsible for both the frontend and backend of the application I built. My focus has been on usability, UI/UX, functionality, maintainability, and user flow. I implemented responsive UI components using React and TypeScript, integrated APIs, and aimed to create a great developer experience through well-structured and tested code.
 
 <h3>Description of Project</h3>
@@ -21,13 +21,36 @@ There are two folders, <strong>Frontend</strong> and <strong>Backend</strong>
 
 <strong>Backend</strong>
 
+<h3>Guide</h3>
 
+1. Run the backend API
 
+- `Cd backend`
 
-<h3></h3>
+- `Bun install`
 
-Reseed database:
-npx prisma migrate reset
-Press -y
+- `brew install postgresql` # (if not installed)
 
-It automatically reseeds, so the database should be freshly populated with new data
+- Create a .env file, and specific the database entrypoint.
+  Example: DATABASE_URL="postgresql://postgres:secret@localhost:5432/postgres?schema=public"
+  It should be running on port: 6543 since I use a postgres database
+- `Bun run index.ts`
+
+- The API is now running.
+
+2.  Run the frontend
+
+- `Cd frontend`
+- `Bun install`
+- `Bun run start`
+
+The frontend is now running.
+
+3.  I am using docker to run database services, and docker compose to gather them. You can run your postgreSQL database as you usually do.
+
+- Usually i do:
+  `Docker compose up`
+
+- And then i am ready to populate the database, with the following two commands:
+  `npx prisma generate`
+  `npx prisma migrate dev`

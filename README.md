@@ -41,7 +41,7 @@ It should be running on port: 6543 since I use a postgres database
 
 2.  Run the frontend
 
-- `Cd frontend`
+- `cd frontend`
 - `bun install`
 - `bun run start`
 

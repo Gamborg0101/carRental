@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 
+const BASE_URL = process.env.REACT_APP_SERVER_BASE;
+
 export default function GetBookings() {
   const [users, setUsers] = useState([]);
   const [cars, setCars] = useState([]);
@@ -12,9 +14,9 @@ export default function GetBookings() {
   const fetchData = async () => {
     try {
       const [usersRes, carsRes, rentalsRes] = await Promise.all([
-        fetch("http://localhost:6543/api/getusers"),
-        fetch("http://localhost:6543/api/getcars"),
-        fetch("http://localhost:6543/api/getrentals"),
+        fetch(`${BASE_URL}/api/getusers`),
+        fetch(`${BASE_URL}/api/getcars`),
+        fetch(`${BASE_URL}/api/getrentals`),
       ]);
 
       const usersData = await usersRes.json();

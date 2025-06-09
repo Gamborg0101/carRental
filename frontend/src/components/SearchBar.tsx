@@ -2,6 +2,9 @@ import { useState } from "react";
 import Modal from "./Modal";
 import SearchControls from "./SearchControls";
 import SearchResultsTable from "./SearchResultsTable";
+import { basename } from "path";
+
+const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 
 type SearchBarProps = {
   users: any[];
@@ -44,15 +47,12 @@ export default function SearchBar({
         return [];
     }
   };
-  //Lav noget .env ligesom dette: await fetch(env.get(SERVER_BASE) + `${endpoint}`, {
-  /* Lav en .env fil med variabler, som kan afspejlse endpoints. */
-  /* Serpation of concerns */
 
   const handleDelete = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete it?")) return;
 
     try {
-      await fetch(`http://localhost:6543/api/deletecar/${id}`, {
+      await fetch(`${BASE_URL}/api/deletecar/${id}`, {
         method: "DELETE",
       });
       refreshData();
@@ -70,11 +70,11 @@ export default function SearchBar({
 
     try {
       /* Return rental */
-      await fetch(`http://localhost:6543/api/returnrental/${id}`, {
+      await fetch(`${BASE_URL}/api/returnrental/${id}`, {
         method: "POST",
       });
       /* Delete rental */
-      await fetch(`http://localhost:6543/api/deleterental/${id}`, {
+      await fetch(`${BASE_URL}/api/deleterental/${id}`, {
         method: "DELETE",
       });
       alert("Car returned and rental deleted");

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+const BASE_URL = process.env.REACT_APP_SERVER_BASE;
+
 interface User {
   id: number;
   firstname: string;
@@ -26,20 +28,19 @@ export default function CreateRentalForm({
   ); /* State is an array of user objects - TS needs to know what is inside of the array   */
   const [cars, setCars] = useState<Car[]>([]);
 
-function getAvailableCars(carsData: any[]): Car[] {
-  return carsData.filter(
-    (car) =>
-      !car.rentals || car.rentals.every((r: any) => r.returnedAt)
-  );
-}
+  function getAvailableCars(carsData: any[]): Car[] {
+    return carsData.filter(
+      (car) => !car.rentals || car.rentals.every((r: any) => r.returnedAt)
+    );
+  }
 
   /* Create a rental */
   useEffect(() => {
-    fetch("http://localhost:6543/api/getusers")
+    fetch(`${BASE_URL}/api/getusers`)
       .then((res) => res.json())
       .then((usersData) => setUsers(usersData));
 
-    fetch("http://localhost:6543/api/getcars")
+    fetch(`${BASE_URL}/api/getcars`)
       .then((res) => res.json())
       .then((carsData) => setCars(getAvailableCars(carsData)));
   }, []);
@@ -47,7 +48,7 @@ function getAvailableCars(carsData: any[]): Car[] {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    fetch("http://localhost:6543/api/createrental", {
+    fetch(`${BASE_URL}/api/createrental`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,9 +59,8 @@ function getAvailableCars(carsData: any[]): Car[] {
       }),
     }).then((response) => {
       if (response.ok) {
-        
         alert("Rental created!");
-        closeModal(); 
+        closeModal();
       } else {
         alert("Error creating rental");
       }

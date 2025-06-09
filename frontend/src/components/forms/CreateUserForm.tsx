@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const BASE_URL = process.env.REACT_APP_SERVER_BASE;
+
 interface CreateUserFormProps {
   closeModal: () => void;
 }
@@ -12,7 +14,7 @@ export default function CreateUserForm({ closeModal }: CreateUserFormProps) {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    fetch("http://localhost:6543/api/createuser", {
+    fetch(`${BASE_URL}/api/createuser`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ firstname, lastname, phonenumber, email }),

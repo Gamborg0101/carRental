@@ -4,6 +4,8 @@ interface CreateCarFormProps {
   closeModal: () => void;
 }
 
+const BASE_URL = process.env.REACT_APP_SERVER_BASE;
+
 export default function CreateCarForm({ closeModal }: CreateCarFormProps) {
   const [maker, setMaker] = useState("");
   const [model, setModel] = useState("");
@@ -12,13 +14,12 @@ export default function CreateCarForm({ closeModal }: CreateCarFormProps) {
   /* Create a car */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const response = await fetch("http://localhost:6543/api/createcar", {
+    const response = await fetch(`${BASE_URL}/api/createcar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ maker, model, year }),
     });
     if (response.ok) {
-      
       alert("Car created!");
       closeModal();
     } else {

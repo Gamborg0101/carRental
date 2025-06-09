@@ -21,6 +21,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@prisma/client": "^6.9.0"
+    "@prisma/client": "^6.9.0",
+    "react-dotenv": "^0.1.3"
   }
 }

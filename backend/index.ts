@@ -1,8 +1,5 @@
 import { serve } from "bun";
 import { PrismaClient } from "@prisma/client";
-import dotenv from "react-dotenv";
-
-dotenv.config();
 
 const PORT = 6543;
 const prisma = new PrismaClient();

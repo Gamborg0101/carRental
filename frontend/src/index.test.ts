@@ -100,9 +100,13 @@ describe("Data Structure & Logic", () => {
     expect(getPlaceholder("cars")).toBe("Search by model, maker, or year");
   });
 
+  let activeForm: "user" | "car" | "rental" | null = null;
+
+  const setActiveForm = (form: "user" | "car" | "rental" | null) => {
+    activeForm = form;
+  };
+
   test("Form modal opens with correct form type", () => {
-    let activeForm: "user" | "car" | "rental" | null = null;
-    const setActiveForm = (form: typeof activeForm) => (activeForm = form);
     setActiveForm("user");
     expect(activeForm).toBe("user");
     setActiveForm("car");

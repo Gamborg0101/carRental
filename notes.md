@@ -2,6 +2,9 @@
 
 # To do:
 
+Vigtig i morgen:
+Hvis bilen er lånt ud, så skal den ikke være i "Create rental".
+
 - Brug kun bun run
 - When going into new search param - just refresh automatically.
 - Need to fix redirection

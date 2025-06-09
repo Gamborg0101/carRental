@@ -15,13 +15,13 @@
     "bun-types": "^1.2.15",
     "prisma": "^6.9.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "@prisma/client": "^6.9.0"
+    "@prisma/client": "^6.9.0",
+    "tsx": "^4.19.4"
   }
 }

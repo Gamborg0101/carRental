@@ -27,8 +27,6 @@ There are two folders: <strong>Frontend</strong> and <strong>Backend</strong>
 
 - `bun install`
 
-- `brew install postgresql` # (if not installed)
-
 - Create a .env file, and specific the database entrypoint.
 
 Example: DATABASE_URL="postgresql://postgres:secret@localhost:5432/postgres?schema=public"

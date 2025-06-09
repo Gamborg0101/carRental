@@ -1,16 +1,12 @@
-# fly.toml app configuration file generated for carrentalbackend on 2025-06-09T22:41:35+02:00
+# fly.toml app configuration file generated for carrentalfrontend on 2025-06-09T22:45:26+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'carrentalbackend'
+app = 'carrentalfrontend'
 primary_region = 'arn'
 
 [build]
-
-[deploy]
-  release_command = 'bunx prisma migrate deploy'
-  seed_command = 'tsx prisma/seed.ts'
 
 [http_service]
   internal_port = 3000

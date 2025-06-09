@@ -26,9 +26,12 @@ export default function CreateRentalForm({
   ); /* State is an array of user objects - TS needs to know what is inside of the array   */
   const [cars, setCars] = useState<Car[]>([]);
 
-  function getAvailableCars(cars: Car[]): Car[] {
-    return cars;
-  }
+function getAvailableCars(carsData: any[]): Car[] {
+  return carsData.filter(
+    (car) =>
+      !car.rentals || car.rentals.every((r: any) => r.returnedAt)
+  );
+}
 
   /* Create a rental */
   useEffect(() => {

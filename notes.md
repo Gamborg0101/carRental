@@ -4,6 +4,15 @@
 
 Vigtig i morgen:
 Hvis bilen er lånt ud, så skal den ikke være i "Create rental".
+Mangler at lave denne.
+Jeg skal have resettet min database, og så skal jeg have seedet på ny. Det er for uoverskueligt med så mange entries.
+
+Lige nu, når forsøger at lade en bruger booke en bil der allerede er booket, eller hvis jeg forsøger at udlåne en bil der er udlånt, melder den en fetch error.
+
+Derefter skal jeg have lavet det med URL's.
+Så skal jeg have skrevet dokuemntation.
+Installation guide, role explanation, improvements and something else?
+Så deploy.
 
 - Brug kun bun run
 - When going into new search param - just refresh automatically.

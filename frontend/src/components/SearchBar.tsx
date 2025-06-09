@@ -32,7 +32,7 @@ export default function SearchBar({
       case "cars":
         if (!cars || !Array.isArray(cars)) return [];
         return cars.filter((car) => car.model.toLowerCase().includes(query));
-        
+
       case "rentals":
         if (!rentals || !Array.isArray(rentals)) return [];
         return rentals.filter(

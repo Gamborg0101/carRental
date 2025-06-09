@@ -6,17 +6,25 @@ This project is a full-stack, lightweight car rental management application desi
 
 <h3>Possible improvements</h3>
 
-* IDs currently increment only and never reset — adding a system to save previous users to track car previously booking history. 
+- IDs currently increment only and never reset — adding a system to save previous users to track car previously booking history.
 
-* Add authentication
+- Add authentication
 
-* Implement more thorough data validation
+- Implement more thorough data validation
 
-* Create a view file for all endpoints
+- Create a view file for all endpoints
 
-* Clean up and improve the UI
+- Clean up and improve the UI
+
+<h3>Get project started</h3>
+There are two folders, <strong>Frontend</strong> and <strong>Backend</strong>
+
+<strong>Backend</strong>
 
 
+
+
+<h3></h3>
 
 Reseed database:
 npx prisma migrate reset

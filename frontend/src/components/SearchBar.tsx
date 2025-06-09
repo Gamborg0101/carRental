@@ -2,7 +2,6 @@ import { useState } from "react";
 import Modal from "./Modal";
 import SearchControls from "./SearchControls";
 import SearchResultsTable from "./SearchResultsTable";
-import { basename } from "path";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 

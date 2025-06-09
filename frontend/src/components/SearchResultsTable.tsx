@@ -1,4 +1,3 @@
-// SearchResultsTable.tsx
 import React from "react";
 
 type SearchResultsTableProps = {

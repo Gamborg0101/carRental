@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import SearchBar from "../components/SearchBar";
 
+// const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 
 export default function GetBookings() {

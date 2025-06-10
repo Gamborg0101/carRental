@@ -4,6 +4,7 @@ interface CreateCarFormProps {
   closeModal: () => void;
 }
 
+// const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 
 export default function CreateCarForm({ closeModal }: CreateCarFormProps) {

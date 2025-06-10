@@ -3,7 +3,10 @@ import Modal from "./Modal";
 import SearchControls from "./SearchControls";
 import SearchResultsTable from "./SearchResultsTable";
 
+// const BASE_URL = process.env.REACT_APP_SERVER_BASE;
 const BASE_URL = process.env.REACT_APP_SERVER_BASE;
+
+console.log(BASE_URL);
 
 type SearchBarProps = {
   users: any[];

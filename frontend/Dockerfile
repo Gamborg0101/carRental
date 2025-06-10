@@ -21,11 +21,13 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential pkg-config python-is-python3
 
 # Install node modules
-COPY bun.lock package-lock.json package.json ./
-RUN bun install
+COPY bun.lock package.json ./
+RUN bun install --dev
 
 # Copy application code
 COPY . .
+
+ENV REACT_APP_SERVER_BASE="https://backend-old-fog-1123.fly.dev"
 
 # Build application
 RUN bun --bun run build
@@ -43,4 +45,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "bun", "run", "start" ]
+CMD [ "bunx", "serve", "-s", "build" ]

@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for carrentalbackend on 2025-06-09T22:41:35+02:00
+# fly.toml app configuration file generated for backend-old-fog-1123 on 2025-06-10T16:42:36+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'carrentalbackend'
+app = 'backend-old-fog-1123'
 primary_region = 'arn'
 
 [build]
@@ -13,7 +13,7 @@ primary_region = 'arn'
   seed_command = 'tsx prisma/seed.ts'
 
 [http_service]
-  internal_port = 3000
+  internal_port = 6543
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true

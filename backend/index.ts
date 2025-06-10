@@ -86,7 +86,7 @@ async function createNewRental(data: Rental) {
       returnedAt: null,
     },
     include: {
-      car: true /* Forstå det her 100%  */,
+      car: true,
     },
   });
 
@@ -230,7 +230,7 @@ serve({
         const id = Number(match[1]);
         await deleteUser(id);
         return new Response("User deleted", {
-          /* Extract til metoder */ status: 200,
+          status: 200,
           headers: defaultHeaders,
         });
       }
